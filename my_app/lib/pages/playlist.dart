@@ -22,259 +22,8 @@ class Song {
   Song(this.title, this.artist, this.url, this.coverUrl);
 }
 
-// class PlayList extends StatefulWidget {
-//   @override
-//   _PlayListState createState() => _PlayListState();
-// }
-
-// class _PlayListState extends State<PlayList> {
-//   late AudioService audioService;
-
-//   final List<Playlist> playlists = [
-//     Playlist('Dark Side Of The Moon', [
-//       Song('Speak To Me', 'PinkFloyd', 'assets/darkside/01_Speak_To_Me.mp3',
-//           'assets/darkside/darkside.jpg'),
-//       Song('Breathe', 'PinkFloyd', 'assets/darkside/02_Breathe.mp3',
-//           'assets/darkside/darkside.jpg'),
-//       Song('On The Run', 'PinkFloyd', 'assets/darkside/03_On_The_Run.mp3',
-//           'assets/darkside/darkside.jpg'),
-//       Song('Time', 'PinkFloyd', 'assets/darkside/04_Time.mp3',
-//           'assets/darkside/darkside.jpg'),
-//       Song(
-//           'The Great Gig In The Sky',
-//           'PinkFloyd',
-//           'assets/darkside/05_The_Great_Gig_In_The_Sky.mp3',
-//           'assets/darkside/darkside.jpg'),
-//       Song('Money', 'PinkFloyd', 'assets/darkside/06_Money.mp3',
-//           'assets/darkside/darkside.jpg'),
-//       Song('Us And Them', 'PinkFloyd', 'assets/darkside/07_Us_And_Them.mp3',
-//           'assets/darkside/darkside.jpg'),
-//       Song(
-//           'Any Colour You Like',
-//           'PinkFloyd',
-//           'assets/darkside/08_Any_Colour_You_Like.mp3',
-//           'assets/darkside/darkside.jpg'),
-//       Song('Brain Damage', 'PinkFloyd', 'assets/darkside/09_Brain_Damage.mp3',
-//           'assets/darkside/darkside.jpg'),
-//       Song('Eclipse', 'PinkFloyd', 'assets/darkside/10_Eclipse.mp3',
-//           'assets/darkside/darkside.jpg'),
-//     ]),
-//     Playlist('Playlist2', [
-//       Song('Song1', 'PinkFloyd3', 'assets/audio1.mp3',
-//           'assets/thewall/thewall.jpg'),
-//       Song('Song2', 'PinkFloyd4', 'assets/audio2.mp3',
-//           'assets/thewall/thewall.jpg'),
-//       // Add more songs to your list
-//     ]),
-//     Playlist('Playlist3', [
-//       Song(
-//           'Song1', 'PinkFloyd5', 'assets/audio1.mp3', 'assets/shine/shine.jpg'),
-//       Song(
-//           'Song2', 'PinkFloyd6', 'assets/audio2.mp3', 'assets/shine/shine.jpg'),
-//       // Add more songs to your list
-//     ]),
-//     Playlist('Playlist4', [
-//       Song('Song1', 'Scorpians1', 'assets/audio1.mp3',
-//           'assets/crazyworld/crazyworld.jpg'),
-//       Song('Song2', 'Scorpians2', 'assets/audio2.mp3',
-//           'assets/crazyworld/crazyworld.jpg'),
-//       // Add more songs to your list
-//     ]),
-//     // Add more playlists to your list
-//   ];
-
-//   Playlist? currentPlaylist;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     audioService = Provider.of<AudioService>(context, listen: false);
-//     audioService.audioPlayer.playerStateStream.listen((playerState) async {
-//       print("Player state: ${playerState.processingState}"); // Add this line.
-//       if (playerState.processingState == ProcessingState.completed) {
-//         await Future.delayed(Duration(milliseconds: 1000));
-//         playNextSong();
-//       }
-//     });
-//   }
-
-//   void playNextSong() {
-//     print("playNextSong called in playlist"); // Keep this line.
-//     if (currentPlaylist != null && audioService.currentSong != null) {
-//       var currentSongIndex =
-//           currentPlaylist!.songs.indexOf(audioService.currentSong!);
-
-//       print(
-//           "Current song index in playlist: $currentSongIndex"); // Keep this line.
-
-//       if (currentSongIndex + 1 < currentPlaylist!.songs.length) {
-//         audioService.currentSong = currentPlaylist!.songs[currentSongIndex + 1];
-//         audioService.playSong(audioService.currentSong!);
-//       }
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Column(
-//         children: <Widget>[
-//           Container(
-//             padding: const EdgeInsets.only(top: 80.0, right: 200.0),
-//             child: Text(
-//               "My Playlist",
-//               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-//             ),
-//           ),
-//           // Song list
-//           Expanded(
-//             child: ListView.builder(
-//               itemCount: playlists.length,
-//               padding: const EdgeInsets.only(bottom: 150.0),
-//               itemBuilder: (context, index) {
-//                 return ListTile(
-//                   leading: Container(
-//                     decoration: BoxDecoration(
-//                         borderRadius: BorderRadius.circular(10.0)),
-//                     child: ClipRRect(
-//                       borderRadius: BorderRadius.circular(10.0),
-//                       child: Image.asset(playlists[index].songs[0].coverUrl),
-//                     ),
-//                   ),
-//                   title: Text(playlists[index].title),
-//                   subtitle: Text(playlists[index].songs[0].artist),
-//                   trailing: IconButton(
-//                     icon: Icon(Icons.play_arrow),
-//                     onPressed: () async {
-//                       setState(() {
-//                         currentPlaylist = playlists[index];
-//                         audioService.currentSong = playlists[index].songs[0];
-//                       });
-//                       await audioService.audioPlayer
-//                           .setAsset(playlists[index].songs[0].url);
-//                       await audioService.audioPlayer.play();
-//                     },
-//                   ),
-//                   onTap: () {
-//                     Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) =>
-//                             MusicInPlaylistPage(playlist: playlists[index]),
-//                       ),
-//                     );
-//                   },
-//                 );
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
-//       bottomSheet: audioService.currentSong == null
-//           ? null
-//           : Consumer<AudioService>(
-//               builder: (context, audioService, child) {
-//                 return Container(
-//                   height: 150,
-//                   child: SingleChildScrollView(
-//                     child: Column(
-//                       children: <Widget>[
-//                         // Move the Slider to the top
-//                         StreamBuilder<Duration>(
-//                           stream: audioService.audioPlayer.positionStream,
-//                           builder: (context, snapshot) {
-//                             final position = snapshot.data ?? Duration.zero;
-//                             return StreamBuilder<Duration?>(
-//                               stream: audioService.audioPlayer.durationStream,
-//                               builder: (context, snapshot) {
-//                                 var duration = snapshot.data ?? Duration.zero;
-//                                 return Slider(
-//                                   onChanged: (value) {
-//                                     audioService.audioPlayer
-//                                         .seek(Duration(seconds: value.round()));
-//                                   },
-//                                   value: position.inSeconds.toDouble(),
-//                                   min: 0.0,
-//                                   max: duration.inSeconds.toDouble(),
-//                                 );
-//                               },
-//                             );
-//                           },
-//                         ),
-//                         Row(
-//                           children: <Widget>[
-//                             Padding(
-//                               padding: const EdgeInsets.only(
-//                                   left: 20.0,
-//                                   right: 5), // Adjust the padding as needed
-//                               child: Container(
-//                                 width: 80.0,
-//                                 height: 80.0,
-//                                 decoration: BoxDecoration(
-//                                     borderRadius: BorderRadius.circular(10.0)),
-//                                 child: ClipRRect(
-//                                   borderRadius: BorderRadius.circular(10.0),
-//                                   child: Image.asset(
-//                                     audioService.currentSong!.coverUrl,
-//                                     fit: BoxFit.cover,
-//                                   ),
-//                                 ),
-//                               ),
-//                             ),
-//                             Expanded(
-//                               child: Padding(
-//                                 padding: const EdgeInsets.all(
-//                                     8.0), // Adjust the padding as needed
-//                                 child: Column(
-//                                   children: [
-//                                     Text(audioService.currentSong!.title),
-//                                     Text(audioService.currentSong!.artist),
-//                                   ],
-//                                 ),
-//                               ),
-//                             ),
-//                             Padding(
-//                               padding: const EdgeInsets.all(
-//                                   15.0), // Adjust the padding as needed
-//                               child: StreamBuilder<bool>(
-//                                 stream: audioService.audioPlayer.playingStream,
-//                                 builder: (context, snapshot) {
-//                                   final isPlaying = snapshot.data ?? false;
-//                                   return IconButton(
-//                                     icon: Icon(isPlaying
-//                                         ? Icons.pause
-//                                         : Icons.play_arrow),
-//                                     onPressed: () {
-//                                       isPlaying
-//                                           ? audioService.audioPlayer.pause()
-//                                           : audioService.audioPlayer.play();
-//                                     },
-//                                   );
-//                                 },
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 );
-//               },
-//             ),
-//     );
-//   }
-// }
-
 class PlayList extends StatelessWidget {
   final List<Playlist> playlists = [
-    // Playlist('Dark Side Of The Moon', [
-    //   // Song('Breathe', 'PinkFloyd', 'assets/darkside/02_Breathe.mp3',
-    //   //     'assets/darkside/darkside.jpg'),
-    //   // Song('Time', 'PinkFloyd', 'assets/darkside/04_Time.mp3',
-    //   //     'assets/darkside/darkside.jpg'),
-    //   Song('Money', 'PinkFloyd', 'assets/darkside/06_Money.mp3',
-    //       'assets/darkside/darkside.jpg'),
-    // ]),
     Playlist('Crazy World', [
       Song(
           'Wind of change',
@@ -384,7 +133,6 @@ class PlayList extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
-                        // Move the Slider to the top
                         StreamBuilder<Duration>(
                           stream: audioService.audioPlayer.positionStream,
                           builder: (context, snapshot) {
@@ -411,7 +159,7 @@ class PlayList extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 20.0,
-                                  right: 5), // Adjust the padding as needed
+                                  right: 5),
                               child: Container(
                                 width: 80.0,
                                 height: 80.0,
@@ -429,7 +177,7 @@ class PlayList extends StatelessWidget {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(
-                                    8.0), // Adjust the padding as needed
+                                    8.0),
                                 child: Column(
                                   children: [
                                     Text(audioService.currentSong!.title),
@@ -440,7 +188,7 @@ class PlayList extends StatelessWidget {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(
-                                  15.0), // Adjust the padding as needed
+                                  15.0),
                               child: StreamBuilder<bool>(
                                 stream: audioService.audioPlayer.playingStream,
                                 builder: (context, snapshot) {
